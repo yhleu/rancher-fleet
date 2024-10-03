@@ -1,5 +1,4 @@
 apiVersion: management.cattle.io/v3
 kind: FleetWorkspace
 metadata:
-  name: prod
-  namespace: prod
+  name: testing
