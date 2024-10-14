@@ -5,8 +5,8 @@ helm:
   version: 27.0.2
   valuesFiles:
     - traefik-values.yaml
-  kustomize:
-    dir: ./kustomize
+kustomize:
+  dir: ./kustomize
 # targetCustomizations:
 # - name: prod
   # helm:
