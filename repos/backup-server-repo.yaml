@@ -8,6 +8,7 @@ spec:
   branch: main
   paths:
     - apps/traefik
+    - secrets
   targets:
   - clusterSelector:
       matchLabels:
