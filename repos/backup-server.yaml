@@ -10,5 +10,5 @@ spec:
     - apps/traefik
   targets:
   - clusterSelector:
-    matchLabels:
-      type: backup-server
+      matchLabels:
+        type: backup-server
