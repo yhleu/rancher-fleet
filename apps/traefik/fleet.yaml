@@ -1,0 +1,23 @@
+namespace: kube-system
+helm:
+  repo: https://traefik.github.io/charts
+  chart: traefik
+  version: 27.0.2
+  valuesFiles:
+    - traefik-values.yaml
+  kustomize:
+    dir: ./kustomize
+# targetCustomizations:
+# - name: prod
+  # helm:
+    # valuesFiles:
+      # - prod_values.yaml
+  # clusterSelector:
+    # matchLabels:
+      # env: prod
+
+# - name: test
+  # helm:
+    # valuesFiles:
+      # - testing_values.yaml
+  # clusterGroup: testing-group

@@ -1,0 +1,66 @@
+image:
+  tag: "v2.11.8"
+globalArguments: []
+logs:
+  general:
+    # Alternative logging levels are DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
+    level: WARN
+  access:
+    enabled: false
+ports:
+  web:
+    redirectTo: 
+      port: websecure
+  websecure:
+    middlewares:
+      - default-default-secure-headers@kubernetescrd
+
+service:
+  spec:
+    # 在standalone環境中只有一個Node，所以externalTrafficPolicy設為Local，讓Traefik獲取真實的Client IP
+    externalTrafficPolicy: Local
+podSecurityContext:
+  runAsGroup: 10301
+  runAsUser: 10301
+env:
+  - name: POD_NAME
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.name
+  - name: POD_NAMESPACE
+    valueFrom:
+      fieldRef:
+        fieldPath: metadata.namespace
+  - name: TZ
+    value: Asia/Taipei
+experimental:
+  # -- Enable traefik experimental plugins
+  plugins:
+    staticresponse:
+      moduleName: "github.com/jdel/staticresponse"
+      version: "v0.0.1"
+
+## 若要使用Prometheus監視Traefik，取消下段註釋
+# metrics:
+  # prometheus:
+    # service:
+      # enabled: true
+    # serviceMonitor:
+      # jobLabel: traefik
+      # interval: 30s
+      # honorLabels: true
+      # additionalLabels:
+        # release: kube-prometheus-stack
+
+## 使用 Let’s Encrypt 獲取憑證時，請取消下段註釋
+# persistence:
+  # enabled: true
+# additionalArguments:
+  # - --certificatesresolvers.letsencrypt.acme.tlschallenge=true
+  # ## SRS_CHANGE_ME 請將acme.email改為您的email address
+  # - --certificatesresolvers.letsencrypt.acme.email=yh.leu@hwacom.com
+  # # using Let's Encrypt staging server
+  # #- --certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+  # # using Let's Encrypt production server
+  # - --certificatesresolvers.letsencrypt.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+  # - --certificatesresolvers.letsencrypt.acme.storage=/data/acme.json
