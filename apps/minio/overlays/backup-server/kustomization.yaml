@@ -1,0 +1,14 @@
+## Minio kustomize overlay for backup-server
+resources:
+- ingress-route.yaml
+- ipallowlist.yaml
+
+secretGenerator:
+- name: minio-secret
+  envs:
+  - minio-secret.txt
+- name: minio-tls-secret
+  type: "kubernetes.io/tls"
+  files:
+  - backup.rd0.hwacom.com.crt
+  - backup.rd0.hwacom.com.key

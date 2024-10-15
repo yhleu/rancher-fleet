@@ -1,0 +1,4 @@
+## Traefik kustomize overlay for backup-server
+resources:
+- ../../kustomize
+- traefik-network-policy.yaml

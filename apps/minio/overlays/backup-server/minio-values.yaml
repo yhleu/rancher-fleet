@@ -1,0 +1,12 @@
+## Minio helm value overlay for backup-server
+resources:
+  requests:
+    cpu: 1.0
+    memory: 1024Mi
+  limits:
+    cpu: 2.0
+    memory: 2048Mi
+persistence:
+  ## PVC Storage Request for MinIO data volume
+  size: 16Gi
+

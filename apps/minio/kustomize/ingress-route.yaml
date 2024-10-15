@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: minio
+  namespace: minio
+spec:
+  entryPoints:
+    - minio-api
+  routes:
+    ## minio route
+    - match: Host(`tcismanager.rd0.hwacom.com`)
+      kind: Rule
+      services:
+        - name: minio
+          port: 9000
+      middlewares:
+        - name: ipallowlist-minio-management
