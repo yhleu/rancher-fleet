@@ -8,7 +8,7 @@ spec:
     - minio-api
   routes:
     ## minio route
-    - match: Host(`backup.rd0.hwacom.com`)
+    - match: Host(`minio-api.rd0.hwacom.com`)
       kind: Rule
       services:
         - name: minio

@@ -8,6 +8,15 @@ logs:
   access:
     enabled: false
 ports:
+  traefik:
+    ## 預設的port 為9000，但讓給minio-api，因此改為8999
+    port: 8999
+    expose:
+      default: false
+    # -- The exposed port for this service
+    exposedPort: 8999
+    # -- The port protocol (TCP/UDP)
+    protocol: TCP
   web:
     redirectTo: 
       port: websecure

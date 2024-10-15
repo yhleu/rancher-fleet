@@ -10,5 +10,5 @@ secretGenerator:
 - name: minio-tls-secret
   type: "kubernetes.io/tls"
   files:
-  - tls.crt=backup.rd0.hwacom.com.crt
-  - tls.key=backup.rd0.hwacom.com.key
+  - tls.crt=minio-api.rd0.hwacom.com.crt
+  - tls.key=minio-api.rd0.hwacom.com.key
