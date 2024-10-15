@@ -2,7 +2,8 @@
 resources:
 - ingress-route.yaml
 - ipallowlist.yaml
-
+generatorOptions:
+  disableNameSuffixHash: true
 secretGenerator:
 - name: minio-secret
   envs:
