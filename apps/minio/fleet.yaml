@@ -21,4 +21,4 @@ targetCustomizations:
 overrideTargets:
   - clusterSelector:
       matchLabels:
-        type: backup-serverx
+        type: backup-server
