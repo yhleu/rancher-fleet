@@ -3,6 +3,7 @@ defaultNamespace: minio
 helm:
   chart: oci://registry-1.docker.io/bitnamicharts/minio
   version: 14.7.15
+  releaseName: minio
   valuesFiles:
     - minio-values.yaml
 
