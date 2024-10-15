@@ -11,7 +11,7 @@ targetCustomizations:
 - name: backup-server
   clusterSelector:
     matchLabels:
-      management.cattle.io/cluster-display-name: backup-serverx
+      management.cattle.io/cluster-display-name: backup-server
   helm:
     valuesFiles:
       - overlays/backup-server/minio-values.yaml
@@ -21,4 +21,4 @@ targetCustomizations:
 overrideTargets:
   - clusterSelector:
       matchLabels:
-        type: backup-server
+        type: backup-serverx
