@@ -20,3 +20,5 @@ spec:
       services:
         - name: portal
           port: 80
+  tls:
+    secretName: portal-tls-secret

@@ -1,0 +1,11 @@
+## Minio kustomize overlay for backup-server
+resources:
+- ../../kustomize
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+- name: portal-tls-secret
+  type: "kubernetes.io/tls"
+  files:
+  - tls.crt=backup.rd0.hwacom.com.crt
+  - tls.key=backup.rd0.hwacom.com.key
