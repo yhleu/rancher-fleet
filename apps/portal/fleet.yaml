@@ -1,0 +1,19 @@
+## Portal
+defaultNamespace: kube-system
+kustomize:
+  dir: ./kustomize
+# targetCustomizations:
+# - name: backup-server
+  # clusterSelector:
+    # matchLabels:
+      # management.cattle.io/cluster-display-name: backup-server
+  # helm:
+    # valuesFiles:
+      # - overlays/backup-server/traefik-values.yaml
+  # kustomize:
+    # dir: overlays/backup-server
+
+overrideTargets:
+  - clusterSelector:
+      matchLabels:
+        type: backup-server

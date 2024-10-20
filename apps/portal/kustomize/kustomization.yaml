@@ -1,0 +1,5 @@
+## Portal
+resources:
+- portal-deployment.yaml
+- portal-service.yaml
+- portal-ingress-route.yaml
