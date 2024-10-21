@@ -1,10 +1,8 @@
 ## Traefik helm value overlay for backup-server
 ports:
-  # traefik:
-    # ## 預設的port 為9000，但讓給minio-api，因此改為8999
-    # port: 8999
-    # expose:
-      # default: true
+  traefik:
+    expose:
+      default: true
   # 安裝 MinIO時，應啟用minio-api entrypoint
   minio-api:
     port: 9000
