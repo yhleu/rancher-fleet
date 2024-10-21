@@ -4,8 +4,10 @@ metadata:
   name: minio
   namespace: minio
 spec:
+  # entryPoints:
+    # - minio-api
   entryPoints:
-    - minio-api
+    - websecure
   routes:
     ## minio route
     - match: Host(`minio-api.rd0.hwacom.com`)
