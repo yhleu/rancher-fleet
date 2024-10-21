@@ -8,14 +8,14 @@ spec:
     - websecure
   routes:
     ## Portal route
-    - match: Host(`tcismanager.rd0.hwacom.com`) && Path(`/`)
+    - match: Host(`backup.rd0.hwacom.com`) && Path(`/`)
       kind: Rule
       services:
         - name: portal
           port: 80
       middlewares:
         - name: redirect
-    - match: Host(`tcismanager.rd0.hwacom.com`) && PathPrefix(`/portal/`)
+    - match: Host(`backup.rd0.hwacom.com`) && PathPrefix(`/portal/`)
       kind: Rule
       services:
         - name: portal
