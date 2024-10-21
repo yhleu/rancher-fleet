@@ -1,0 +1,20 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: portal
+  namespace: default
+spec:
+  routes:
+    ## Portal route
+    - match: Host(`backup.rd0.hwacom.com`) && Path(`/`)
+      kind: Rule
+      services:
+        - name: portal
+          port: 80
+      middlewares:
+        - name: redirect
+    - match: Host(`backup.rd0.hwacom.com`) && PathPrefix(`/portal/`)
+      kind: Rule
+      services:
+        - name: portal
+          port: 80

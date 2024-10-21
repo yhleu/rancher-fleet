@@ -9,3 +9,6 @@ secretGenerator:
   files:
   - tls.crt=backup.rd0.hwacom.com.crt
   - tls.key=backup.rd0.hwacom.com.key
+  
+patches:
+- path: portal-ingress-route.yaml
