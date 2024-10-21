@@ -17,6 +17,8 @@ ports:
     exposedPort: 8999
     # -- The port protocol (TCP/UDP)
     protocol: TCP
+    tls:
+      enabled: true
   web:
     redirectTo: 
       port: websecure
