@@ -17,5 +17,7 @@ spec:
               # - 10.1.2.12/32
         - namespaceSelector: {}
       ports:
+        # 放行 8443 port (endpoint: websecure) 8443，如果要放行更多port，
+        # 例如 9000 port (endpoint:minio-api)，要在此增加設定
         - protocol: TCP
           port: 8443
