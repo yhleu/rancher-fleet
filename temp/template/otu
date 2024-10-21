@@ -1,0 +1,210 @@
+#!/bin/bash
+
+# 在~/.bashrc 應放入下面function
+#function mcm {
+#  case "$1" in 
+#    on|off|refresh)
+#      source ~/srs/install/base/mcm "$@";;
+#    *)
+#      ~/srs/install/base/mcm "$@";;
+#  esac
+#}
+
+# 初始化或讀取環境變數
+_MCM_STATE=${_MCM_STATE:-"off"}
+
+# 顯示使用說明
+mcm_help() {
+  echo "mcm - Kubernetes Multi-Cluster Management Tool"
+  echo ""
+  echo "Usage:"
+  echo "  mcm on [config_dir]   - Enter MCM enabled state, optionally specify config directory (default: ~/.srs/mcm)"
+  echo "  mcm off               - Exit MCM enabled state"
+  echo "  mcm refresh           - Rescan the config directory for YAML files"
+  echo "  mcm ls                - List available contexts"
+  echo "  mcm sc <context_name> - Switch context"
+  echo "  mcm help              - Show this help message"
+  echo "  mcm                   - Show current status"
+}
+
+# 更新KUBECONFIG內容
+update_kubeconfig() {
+  local config_dir=$1
+  local kubeconfig_files=$(find "$config_dir" -name "*.yaml" | sort | tr '\n' ':')
+  mkdir -p /tmp/mcm && chmod 700 /tmp/mcm
+  # current-context: 會存放在 /tmp/mcm/(current_shell_process_id)
+  echo -n>/tmp/mcm/$$
+  export KUBECONFIG="/tmp/mcm/$$:${kubeconfig_files%:}"
+}
+
+# 啟用 MCM
+ot_create() {
+  if [ "$_MCM_STATE" == "on" ]; then
+    echo "MCM is already enabled."
+    return
+  fi
+  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "Please enable MCM using '. mcm on'" 
+    return
+  fi
+  if [ -z "$1" ]; then
+    _MCM_CONFIG_DIR=$(realpath ~/.srs/mcm)
+  else
+    _MCM_CONFIG_DIR=$(realpath "$1")
+  fi
+
+  if [[ ! -d "$_MCM_CONFIG_DIR" ]]; then
+    echo "config directory $_MCM_CONFIG_DIR does not exist."
+    return
+  fi
+
+  export _MCM_STATE="on"
+  export _MCM_ORI_PROMPT="$PS1"
+  export _MCM_ORI_KUBECONFIG="$KUBECONFIG"
+  export _MCM_CONFIG_DIR
+
+  update_kubeconfig "$_MCM_CONFIG_DIR"
+
+  # 設定 prompt，動態顯示目前的 context
+  PS1='($(kubectl config current-context)) '$_MCM_ORI_PROMPT
+
+  echo "MCM enabled, config directory: $_MCM_CONFIG_DIR"
+}
+
+# 停用 MCM
+mcm_off() {
+  if [ "$_MCM_STATE" == "off" ]; then
+    echo "MCM is already disabled."
+    return
+  fi
+  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "Please disable MCM using '. mcm off'"
+    return
+  fi
+  export _MCM_STATE="off"
+
+  # 恢復原始 prompt 和 KUBECONFIG
+  PS1="$_MCM_ORI_PROMPT"
+  export KUBECONFIG="$_MCM_ORI_KUBECONFIG"
+
+  unset _MCM_ORI_PROMPT
+  unset _MCM_ORI_KUBECONFIG
+  unset _MCM_CONFIG_DIR
+  rm /tmp/mcm/$$
+  echo "MCM disabled."
+}
+
+# 列出可用的 context
+mcm_ls() {
+  if [ "$_MCM_STATE" == "off" ]; then
+    echo "Please enable MCM using '. mcm on' before using this command."
+    return
+  fi 
+  kubectl config get-contexts
+}
+
+# 切換 context 
+mcm_sc() {
+  if [ "$_MCM_STATE" == "off" ]; then
+    echo "Please enable MCM using 'mcm on' before using this command."
+    return
+  fi
+  if [ -z "$1" ]; then
+    echo "Please provide a context name."
+    return
+  fi 
+
+  kubectl config use-context "$1"
+}
+
+# 顯示目前狀態 
+mcm_status() {
+  if [ "$_MCM_STATE" == "off" ]; then
+    echo "Current MCM status: $_MCM_STATE"
+    return
+  fi
+
+  local current_context=$(kubectl config current-context)
+
+  echo "Current MCM status: $_MCM_STATE"
+  echo "- Config Directory: $_MCM_CONFIG_DIR"
+  echo "- Current Context: $current_context"
+}
+
+# 重新掃描 config 目錄 
+mcm_refresh() {
+  if [ "$_MCM_STATE" == "off" ]; then
+    echo "Please enable MCM using 'mcm on' before using this command."
+    return
+  fi
+  if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    echo "Please refresh config directory using '. mcm refresh'"
+    return
+  fi
+  update_kubeconfig "$_MCM_CONFIG_DIR"
+}
+
+## PATH
+BASE_PATH=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+# 建立 Override Target
+ot_create() {
+  if [ -z "$1" ]; then
+    echo "Please provide a target name."
+    return
+  fi
+  target_path=$(realpath $BASE_PATH/../overlays/$1)
+  if [[ -d "$target_path" ]]; then
+    echo "The overlay target '$1' already exists"
+    return
+  fi
+  
+  mkdir -p $target_path
+  cp .env $target_path/.env
+}
+# 產生 客製化的manifest file
+ot_gen(){
+if [ -z "$1" ]; then
+    echo "Please provide a target name."
+    return
+  fi
+  target_path=$(realpath $BASE_PATH/../overlays/$1)
+  if [[ ! -d "$target_path" ]]; then
+    echo "The overlay target '$1' does not exist"
+    return
+  fi
+  source "$target_path/.env"
+  envsubst < nginx-static-site-pvc.yaml | kubectl -n default apply -f -
+}
+# 主函數處理輸入參數和命令調度
+function main() {
+  if [ -z "$1" ]; then
+    mcm_status
+    return
+  fi
+
+  case "$1" in
+    create)
+      shift
+      create "$@";;
+    off)
+      shift
+      mcm_off;;
+    ls)
+      shift
+      mcm_ls;;
+    sc)
+      shift
+      mcm_sc "$@";;
+    help)
+      shift
+      mcm_help;;
+    refresh)
+      shift
+      mcm_refresh;;
+    *)
+      echo "Error: Unknown command '$1'"
+      return 1;;
+  esac
+}
+
+main "$@"

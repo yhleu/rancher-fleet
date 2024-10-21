@@ -1,0 +1,10 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect
+  namespace: default
+spec:
+  redirectRegex :
+    permanent: true
+    regex: "^https://${SVC_DOMAIN_NAME}"
+    replacement: "https://${SVC_DOMAIN_NAME}/portal"

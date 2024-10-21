@@ -1,0 +1,10 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect
+  namespace: default
+spec:
+  redirectRegex :
+    permanent: true
+    regex: "^https://tcismanager.rd0.hwacom.com"
+    replacement: "https://tcismanager.rd0.hwacom.com/portal"

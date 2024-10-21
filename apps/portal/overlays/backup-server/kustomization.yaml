@@ -1,6 +1,8 @@
-## Minio kustomize overlay for backup-server
+## Portal kustomize overlay for backup-server
 resources:
 - ../../kustomize
+- portal-ingress-route.yaml
+- redirect-middleware.yaml
 generatorOptions:
   disableNameSuffixHash: true
 secretGenerator:
@@ -9,6 +11,4 @@ secretGenerator:
   files:
   - tls.crt=backup.rd0.hwacom.com.crt
   - tls.key=backup.rd0.hwacom.com.key
-  
-patches:
-- path: portal-ingress-route.yaml
+
