@@ -6,7 +6,7 @@ logs:
     # Alternative logging levels are DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
     level: INFO
   access:
-    enabled: false
+    enabled: true
 ports:
   traefik:
     ## 預設的port 為9000，但讓給minio-api，因此改為8999
