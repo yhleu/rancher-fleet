@@ -11,5 +11,5 @@ ports:
     protocol: TCP
     tls:
       enabled: true
-    middlewares:
-      - default-default-secure-headers@kubernetescrd
+    # middlewares:
+      # - default-default-secure-headers@kubernetescrd
