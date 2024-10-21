@@ -1,4 +1,13 @@
 ## Traefik kustomize overlay for backup-server
 resources:
 - ../../kustomize
-- traefik-network-policy.yaml
+# - traefik-network-policy.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+secretGenerator:
+- name: default-tls-secret
+  type: "kubernetes.io/tls"
+  files:
+  - tls.crt=backup.rd0.hwacom.com.crt
+  - tls.key=backup.rd0.hwacom.com.key

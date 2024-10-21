@@ -12,7 +12,7 @@ spec:
   ingress:
     - from:
         - ipBlock:
-            cidr: 10.1.2.6/24
+            cidr: 10.1.2.0/24
             # except:
               # - 10.1.2.12/32
         - namespaceSelector: {}

@@ -22,3 +22,8 @@ overrideTargets:
   - clusterSelector:
       matchLabels:
         type: backup-server
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: traefik

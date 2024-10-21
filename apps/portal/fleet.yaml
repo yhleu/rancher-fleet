@@ -1,7 +1,6 @@
 ## Portal
 defaultNamespace: default
-# kustomize:
-  # dir: ./kustomize
+
 targetCustomizations:
 - name: backup-server
   clusterSelector:
@@ -14,3 +13,8 @@ overrideTargets:
   - clusterSelector:
       matchLabels:
         type: backup-server
+
+dependsOn:
+  - selector:
+      matchLabels:
+        app: traefik

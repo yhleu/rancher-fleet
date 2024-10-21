@@ -1,7 +1,5 @@
 ## Traefik helm value overlay for backup-server
 ports:
-  # websecure:
-    # exposedPort: 8443
   # 安裝 MinIO時，應啟用minio-api entrypoint
   minio-api:
     port: 9000
@@ -11,5 +9,5 @@ ports:
     protocol: TCP
     tls:
       enabled: true
-    # middlewares:
-      # - default-default-secure-headers@kubernetescrd
+    middlewares:
+      - default-default-secure-headers@kubernetescrd

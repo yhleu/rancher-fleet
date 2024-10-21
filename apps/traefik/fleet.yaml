@@ -1,5 +1,7 @@
 ## Traefik
 defaultNamespace: kube-system
+labels:
+  app: traefik
 helm:
   repo: https://traefik.github.io/charts
   chart: traefik
@@ -7,8 +9,7 @@ helm:
   releaseName: traefik
   valuesFiles:
     - traefik-values.yaml
-kustomize:
-  dir: ./kustomize
+
 targetCustomizations:
 - name: backup-server
   clusterSelector:

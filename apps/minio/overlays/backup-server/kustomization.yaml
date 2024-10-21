@@ -8,8 +8,3 @@ secretGenerator:
 - name: minio-secret
   envs:
   - minio-secret.txt
-- name: minio-tls-secret
-  type: "kubernetes.io/tls"
-  files:
-  - tls.crt=minio-api.rd0.hwacom.com.crt
-  - tls.key=minio-api.rd0.hwacom.com.key

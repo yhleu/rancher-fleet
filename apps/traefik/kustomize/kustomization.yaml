@@ -1,4 +1,5 @@
 ## Traefik kustomize base
 resources:
-- traefik-tlsoption.yaml
+- traefik-default-tlsoption.yaml
 - traefik-default-secure-headers.yaml
+- traefik-default-tls-store.yaml
