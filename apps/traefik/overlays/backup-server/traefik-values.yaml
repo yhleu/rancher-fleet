@@ -10,4 +10,4 @@ ports:
     tls:
       enabled: true
     middlewares:
-      - default-default-secure-headers@kubernetescrd
+      - kube-system-default-secure-headers@kubernetescrd

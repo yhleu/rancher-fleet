@@ -22,7 +22,7 @@ ports:
       port: websecure
   websecure:
     middlewares:
-      - default-default-secure-headers@kubernetescrd
+      - kube-system-default-secure-headers@kubernetescrd
 
 service:
   spec:
